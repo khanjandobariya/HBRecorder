@@ -166,6 +166,10 @@ public class ScreenRecordService extends Service {
 
             isCustomSettingsEnabled = intent.getBooleanExtra("enableCustomSettings", false);
 
+            // If notificationVisible == false no notification will be shown
+            boolean isNotificationVisible = intent.getBooleanExtra("notificationVisible", true);
+
+
             //Set notification notification button text if developer did not
             if (notificationButtonText == null) {
                 notificationButtonText = "STOP RECORDING";
@@ -188,49 +192,51 @@ public class ScreenRecordService extends Service {
             }
 
             //Notification
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                String channelId = "001";
-                String channelName = "RecordChannel";
-                NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_NONE);
-                channel.setLightColor(Color.BLUE);
-                channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
-                NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                if (manager != null) {
-                    manager.createNotificationChannel(channel);
-                    Notification notification;
+            if (isNotificationVisible) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    String channelId = "001";
+                    String channelName = "RecordChannel";
+                    NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_NONE);
+                    channel.setLightColor(Color.BLUE);
+                    channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+                    NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    if (manager != null) {
+                        manager.createNotificationChannel(channel);
+                        Notification notification;
 
-                    Intent myIntent = new Intent(this, NotificationReceiver.class);
-                    PendingIntent pendingIntent;
+                        Intent myIntent = new Intent(this, NotificationReceiver.class);
+                        PendingIntent pendingIntent;
 
-                    if (Build.VERSION.SDK_INT >= 31){
-                        pendingIntent = PendingIntent.getBroadcast(this, 0, myIntent, PendingIntent.FLAG_IMMUTABLE);
-                    }else{
-                        pendingIntent = PendingIntent.getBroadcast(this, 0, myIntent, 0);
+                        if (Build.VERSION.SDK_INT >= 31){
+                            pendingIntent = PendingIntent.getBroadcast(this, 0, myIntent, PendingIntent.FLAG_IMMUTABLE);
+                        }else{
+                            pendingIntent = PendingIntent.getBroadcast(this, 0, myIntent, 0);
 
+                        }
+
+                        Notification.Action action = new Notification.Action.Builder(
+                                Icon.createWithResource(this, android.R.drawable.presence_video_online),
+                                notificationButtonText,
+                                pendingIntent).build();
+
+                        if (notificationSmallIcon != null) {
+                            Bitmap bmp = BitmapFactory.decodeByteArray(notificationSmallIcon, 0, notificationSmallIcon.length);
+                            //Modify notification badge
+                            notification = new Notification.Builder(getApplicationContext(), channelId).setOngoing(true).setSmallIcon(Icon.createWithBitmap(bmp)).setContentTitle(notificationTitle).setContentText(notificationDescription).addAction(action).build();
+
+                        } else if (notificationSmallVector != 0){
+                            notification = new Notification.Builder(getApplicationContext(), channelId).setOngoing(true).setSmallIcon(notificationSmallVector).setContentTitle(notificationTitle).setContentText(notificationDescription).addAction(action).build();
+                        }
+
+                        else {
+                            //Modify notification badge
+                            notification = new Notification.Builder(getApplicationContext(), channelId).setOngoing(true).setSmallIcon(R.drawable.icon).setContentTitle(notificationTitle).setContentText(notificationDescription).addAction(action).build();
+                        }
+                        startForeground(101, notification);
                     }
-
-                    Notification.Action action = new Notification.Action.Builder(
-                            Icon.createWithResource(this, android.R.drawable.presence_video_online),
-                            notificationButtonText,
-                            pendingIntent).build();
-
-                    if (notificationSmallIcon != null) {
-                        Bitmap bmp = BitmapFactory.decodeByteArray(notificationSmallIcon, 0, notificationSmallIcon.length);
-                        //Modify notification badge
-                        notification = new Notification.Builder(getApplicationContext(), channelId).setOngoing(true).setSmallIcon(Icon.createWithBitmap(bmp)).setContentTitle(notificationTitle).setContentText(notificationDescription).addAction(action).build();
-
-                    } else if (notificationSmallVector != 0){
-                        notification = new Notification.Builder(getApplicationContext(), channelId).setOngoing(true).setSmallIcon(notificationSmallVector).setContentTitle(notificationTitle).setContentText(notificationDescription).addAction(action).build();
-                    }
-
-                    else {
-                        //Modify notification badge
-                        notification = new Notification.Builder(getApplicationContext(), channelId).setOngoing(true).setSmallIcon(R.drawable.icon).setContentTitle(notificationTitle).setContentText(notificationDescription).addAction(action).build();
-                    }
-                    startForeground(101, notification);
+                } else {
+                    startForeground(101, new Notification());
                 }
-            } else {
-                startForeground(101, new Notification());
             }
 
 
