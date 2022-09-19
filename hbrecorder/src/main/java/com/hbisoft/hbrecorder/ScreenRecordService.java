@@ -192,7 +192,7 @@ public class ScreenRecordService extends Service {
             }
 
             //Notification
-            if (isNotificationVisible && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 String channelId = "001";
                 String channelName = "RecordChannel";
                 NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_NONE);
