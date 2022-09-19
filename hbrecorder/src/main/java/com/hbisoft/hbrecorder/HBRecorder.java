@@ -331,6 +331,7 @@ public class HBRecorder implements MyListener {
             service.putExtra("audioSamplingRate", audioSamplingRate);
             service.putExtra("notificationSmallBitmap", byteArray);
             service.putExtra("notificationSmallVector", vectorDrawable);
+            service.putExtra("notificationVisible", notificationVisible);
             service.putExtra("notificationTitle", notificationTitle);
             service.putExtra("notificationDescription", notificationDescription);
             service.putExtra("notificationButtonText", notificationButtonText);
