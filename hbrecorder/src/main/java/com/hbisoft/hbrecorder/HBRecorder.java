@@ -50,7 +50,7 @@ public class HBRecorder implements MyListener {
     private Activity activity;
     private String outputPath;
     private String fileName;
-    private boolean notificationVisible = true;
+    private boolean notificationActionEnabled = true;
     private String notificationTitle;
     private String notificationDescription;
     private String notificationButtonText;
@@ -280,9 +280,9 @@ public class HBRecorder implements MyListener {
         byteArray = bytes;
     }
 
-    /*Enable or Disable Notification*/
-    public void setNotificationVisible(boolean visible) {
-        notificationVisible = visible;
+    /*Enable or Disable Notification action*/
+    public void setNotificationActionEnabled(boolean enabled) {
+        notificationActionEnabled = enabled;
     }
 
     /*Set notification title*/
@@ -331,7 +331,7 @@ public class HBRecorder implements MyListener {
             service.putExtra("audioSamplingRate", audioSamplingRate);
             service.putExtra("notificationSmallBitmap", byteArray);
             service.putExtra("notificationSmallVector", vectorDrawable);
-            service.putExtra("notificationVisible", notificationVisible);
+            service.putExtra("notificationActionEnabled", notificationActionEnabled);
             service.putExtra("notificationTitle", notificationTitle);
             service.putExtra("notificationDescription", notificationDescription);
             service.putExtra("notificationButtonText", notificationButtonText);

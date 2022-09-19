@@ -167,7 +167,7 @@ public class ScreenRecordService extends Service {
             isCustomSettingsEnabled = intent.getBooleanExtra("enableCustomSettings", false);
 
             // If notificationVisible == false no notification will be shown
-            boolean isNotificationVisible = intent.getBooleanExtra("notificationVisible", true);
+            boolean isNotificationActionEnabled = intent.getBooleanExtra("notificationActionEnabled", true);
 
 
             //Set notification notification button text if developer did not
@@ -221,15 +221,21 @@ public class ScreenRecordService extends Service {
                     if (notificationSmallIcon != null) {
                         Bitmap bmp = BitmapFactory.decodeByteArray(notificationSmallIcon, 0, notificationSmallIcon.length);
                         //Modify notification badge
-                        notification = new Notification.Builder(getApplicationContext(), channelId).setOngoing(true).setSmallIcon(Icon.createWithBitmap(bmp)).setContentTitle(notificationTitle).setContentText(notificationDescription).build();
+                        notification = isNotificationActionEnabled
+                            ? new Notification.Builder(getApplicationContext(), channelId).setOngoing(true).setSmallIcon(Icon.createWithBitmap(bmp)).setContentTitle(notificationTitle).setContentText(notificationDescription).addAction(action).build()
+                            : new Notification.Builder(getApplicationContext(), channelId).setOngoing(true).setSmallIcon(Icon.createWithBitmap(bmp)).setContentTitle(notificationTitle).setContentText(notificationDescription).build();
 
                     } else if (notificationSmallVector != 0){
-                        notification = new Notification.Builder(getApplicationContext(), channelId).setOngoing(true).setSmallIcon(notificationSmallVector).setContentTitle(notificationTitle).setContentText(notificationDescription).build();
+                        notification = isNotificationActionEnabled
+                        ? new Notification.Builder(getApplicationContext(), channelId).setOngoing(true).setSmallIcon(notificationSmallVector).setContentTitle(notificationTitle).setContentText(notificationDescription).addAction(action).build()
+                        : new Notification.Builder(getApplicationContext(), channelId).setOngoing(true).setSmallIcon(notificationSmallVector).setContentTitle(notificationTitle).setContentText(notificationDescription).build();
                     }
 
                     else {
                         //Modify notification badge
-                        notification = new Notification.Builder(getApplicationContext(), channelId).setOngoing(true).setSmallIcon(R.drawable.icon).setContentTitle(notificationTitle).setContentText(notificationDescription).build();
+                        notification = isNotificationActionEnabled
+                            ? new Notification.Builder(getApplicationContext(), channelId).setOngoing(true).setSmallIcon(R.drawable.icon).setContentTitle(notificationTitle).setContentText(notificationDescription).addAction(action).build()
+                            : new Notification.Builder(getApplicationContext(), channelId).setOngoing(true).setSmallIcon(R.drawable.icon).setContentTitle(notificationTitle).setContentText(notificationDescription).build();
                     }
                     startForeground(101, notification);
                 }
