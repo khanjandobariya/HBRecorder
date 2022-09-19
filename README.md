@@ -180,6 +180,9 @@ hbreccorder.resumeScreenRecording();
 hbrecorder.stopScreenRecording();
 // Check if recording is in progress
 hbrecorder.isBusyRecording();
+// Hide / Show notification
+// Defaults to true, set to false to hide notification
+hbrecorder.setNotificationVisible(int);
 // Set notification icon by passing, for example R.drawable.myicon
 // Defaults to R.drawable.icon
 hbrecorder.setNotificationSmallIcon(int);

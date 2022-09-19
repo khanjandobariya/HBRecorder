@@ -50,6 +50,7 @@ public class HBRecorder implements MyListener {
     private boolean isVideoHDEnabled = true;
     private String outputPath;
     private String fileName;
+    private boolean notificationVisible = true;
     private String notificationTitle;
     private String notificationDescription;
     private String notificationButtonText;
@@ -276,6 +277,11 @@ public class HBRecorder implements MyListener {
     /*Change notification icon using byte[]*/
     public void setNotificationSmallIcon(byte[] bytes)  {
         byteArray = bytes;
+    }
+
+    /*Enable or Disable Notification*/
+    public void setNotificationVisible(boolean visible) {
+        notificationVisible = visible;
     }
 
     /*Set notification title*/
