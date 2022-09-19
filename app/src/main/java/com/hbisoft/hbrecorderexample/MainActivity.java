@@ -555,7 +555,6 @@ public class MainActivity extends AppCompatActivity implements HBRecorderListene
     //Handle permissions
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case PERMISSION_REQ_ID_RECORD_AUDIO:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -597,7 +596,7 @@ public class MainActivity extends AppCompatActivity implements HBRecorderListene
                     //Set file path or Uri depending on SDK version
                     setOutputPath();
                     //Start screen recording
-                    hbRecorder.startScreenRecording(data, resultCode);
+                    hbRecorder.startScreenRecording(data, resultCode, this);
 
                 }
             }
