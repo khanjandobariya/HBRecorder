@@ -195,11 +195,16 @@ public class ScreenRecordService extends Service {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 String channelId = "001";
                 String channelName = "RecordChannel";
+                NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                if(manager.getNotificationChannel(channelName) != null) {
+                    manager.deleteNotificationChannel(channelName)
+                }
                 NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH);
                 channel.setLightColor(Color.BLUE);
                 channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
-                NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
                 if (manager != null) {
+
                     manager.createNotificationChannel(channel);
                     Notification notification;
 
